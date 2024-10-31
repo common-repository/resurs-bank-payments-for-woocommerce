@@ -1,0 +1,18 @@
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: ECom2 for PHP 8.1
+            image: php:8.1
+            size: 2x
+            caches:
+              - composer
+            script:
+              - apt-get update && apt-get install -y unzip git
+              - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+              - grep -v "env name" phpunit.xml.example >phpunit.xml
+              - composer install
+              - composer require phpunit/phpunit
+              - composer require brianium/paratest --dev
+              - vendor/bin/paratest --processes=15 --configuration ./phpunit.xml
+#              - vendor/bin/phpunit --configuration ./phpunit.xml

@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Resursbank\Ecom\Lib\Locale\Translator;
+
+?>
+
+<div class="rb-si">
+  <table>
+    <tbody>
+      <tr>
+        <td><?= Translator::translate(phraseId: 'plugin-version') ?></td>
+        <td><?= $this->pluginVersion ?></td>
+      </tr>
+      <tr>
+        <td><?= Translator::translate(phraseId: 'php-version') ?></td>
+        <td><?= $this->getPhpVersion() ?></td>
+      </tr>
+      <tr>
+        <td><?= Translator::translate(phraseId: 'ecom-version') ?></td>
+        <td><?= $this->getEcomVersion() ?></td>
+      </tr>
+      <tr>
+        <td><?= Translator::translate(phraseId: 'ssl-version') ?></td>
+        <td><?= $this->getSslVersion() ?></td>
+      </tr>
+      <tr>
+        <td><?= Translator::translate(phraseId: 'curl-version') ?></td>
+        <td><?= $this->getCurlVersion() ?></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

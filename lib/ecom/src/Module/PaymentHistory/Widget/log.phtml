@@ -1,0 +1,77 @@
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+/** @var Log $this */
+
+use Resursbank\Ecom\Module\PaymentHistory\Translator;
+use Resursbank\Ecom\Module\PaymentHistory\Widget\Log;
+
+?>
+<div id="rb-ph">
+    <button id="rb-ph-button">
+        <?= Translator::translate(phraseId: 'link-title') ?>
+    </button>
+    <div id="rb-ph-hidden" style="display:none;">
+        <div id="rb-ph-background"></div>
+        <div id="rb-ph-content-container">
+            <div id="rb-ph-payment-id">
+                <?= $this->getWidgetTitle() ?>
+                <button id="rb-ph-close-button" class="close-window-link">X</button>
+            </div>
+            <div id="rb-ph-log">
+                <div id="rb-ph-extra" style="display: none;">
+                    <button id="rb-ph-go-back">
+                        <?= Translator::translate(phraseId: 'go-back') ?>
+                    </button>
+                    <div id="rb-ph-extra-content"></div>
+                </div>
+                <table id="rb-ph-log-table">
+                    <thead>
+                    <tr>
+                        <th><?= Translator::translate(phraseId: 'time') ?></th>
+                        <th><?= Translator::translate(phraseId: 'event') ?></th>
+                        <th><?= Translator::translate(phraseId: 'user') ?></th>
+                        <th><?= Translator::translate(phraseId: 'previous-status') ?></th>
+                        <th><?= Translator::translate(phraseId: 'current-status') ?></th>
+                        <th><?= Translator::translate(phraseId: 'extra') ?></th>
+                        <th><?= Translator::translate(phraseId: 'result') ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+<?php foreach ($this->entries as $entry) : ?>
+    <tr class="<?= $this->getResultClass(entry: $entry) ?>">
+        <td><?= date(format: 'Y-m-d H:i:s', timestamp: $entry->time) ?></td>
+        <td><?= Translator::translate(phraseId: $entry->event->value) ?></td>
+        <td><?= $this->getUser(entry: $entry) ?></td>
+        <td><?= $entry->previousOrderStatus ?></td>
+        <td><?= $entry->currentOrderStatus ?></td>
+        <td>
+<?php if ($this->showExtraBtn(entry: $entry)) : ?>
+    <button
+        class="rb-ph-show-extra-btn">
+        <span style="display:none;">
+            <?= $this->getExtraData(entry: $entry) ?>
+        </span>
+        <?= Translator::translate(phraseId: 'show-extra') ?>
+    </button>
+<?php elseif ($entry->extra !== null) : ?>
+    <?= $entry->extra ?>
+<?php endif; ?>
+        </td>
+        <td class="rb-ph-result-icon"></td>
+    </tr>
+<?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

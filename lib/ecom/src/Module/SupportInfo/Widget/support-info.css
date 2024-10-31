@@ -1,0 +1,37 @@
+.rb-si {
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+
+.rb-si,
+.rb-si * {
+    box-sizing: border-box;
+}
+
+.rb-si td {
+    padding: 15px 10px !important;
+}
+
+.rb-si table {
+    border-collapse: collapse;
+}
+
+.rb-si tbody {
+    color: white;
+    border: 1px solid #006464;
+}
+
+.rb-si tbody tr:last-child {
+    border-bottom: 1px solid #009b91;
+}
+
+.rb-si tbody tr:nth-child(even) {
+    background-color: #006464;
+}
+
+.rb-si tbody tr:nth-child(odd) {
+    background-color: #009b91;
+}

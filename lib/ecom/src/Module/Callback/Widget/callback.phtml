@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Resursbank\Ecom\Module\Callback\Widget\Callback;
+
+/**
+ * @var Callback $this
+ */
+?>
+
+<div class="rb-cb">
+    <p class="rb-cb-header">[AUTHORIZATION]</p>
+    <p class="rb-cb-url">
+        <?= $this->getAuthorizationUrl() ?>
+    </p>
+    <p class="rb-cb-header">[MANAGEMENT]</p>
+    <p class="rb-cb-url">
+        <?= $this->getManagementUrl() ?>
+    </p>
+</div>

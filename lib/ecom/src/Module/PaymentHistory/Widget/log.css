@@ -1,0 +1,240 @@
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+#rb-ph {
+    font-family: 'ResursSans-Regular', Arial, sans-serif;
+    text-decoration: none;
+}
+
+#rb-ph a:link, #rb-ph a:visited {
+    color: #00a8e6;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#rb-ph-background {
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.7;
+}
+
+#rb-ph-hidden {
+    display: none;
+}
+
+#rb-ph-content-container {
+    z-index: 1000;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    max-width: 95vw;
+    max-height: calc(100vh - 25px);
+    overflow-y: hidden;
+    margin-bottom: 25px;
+    transform: translate(-50%, -50%);
+}
+
+#rb-ph-log {
+    width: 95vw;
+    min-height: 90vh;
+    border: 0;
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    background-color: #dddddd;
+}
+
+#rb-ph-log,
+#rb-ph-log * {
+    box-sizing: border-box;
+}
+
+#rb-ph-log th {
+    text-align: left;
+    padding: 15px 10px;
+    font-weight: 600;
+}
+
+#rb-ph-log td {
+    padding: 15px 10px;
+}
+
+#rb-ph-log thead tr,
+#rb-ph-log tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#rb-ph-log thead th {
+    display: table-cell;
+    text-align: left;
+    padding: 15px 10px;
+    font-weight: 600;
+    background-color: #dddddd;
+    color: rgb(46, 46, 46);
+    border: 1px solid rgb(192, 192, 192);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+#rb-ph-log tbody {
+    color: white;
+    border: 1px solid #006464;
+    display: block;
+    max-height: calc(100vh - 50px);
+    overflow-y: auto;
+}
+
+#rb-ph-log tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#rb-ph-log tbody td {
+    display: table-cell;
+    padding: 15px 10px;
+}
+
+#rb-ph-log tbody tr:last-child {
+    border-bottom: 1px solid #009b91;
+}
+
+#rb-ph-log tbody tr:nth-child(even) {
+    background-color: #006464;
+}
+
+#rb-ph-log tbody tr:nth-child(odd) {
+    background-color: #009b91;
+}
+
+.rb-ph-show-extra-btn {
+    padding: 6px 10px 7px 10px;
+    background: rgb(0, 43, 100);
+    font-size: 14px;
+    -moz-border-radius: 10%;
+    -webkit-border-radius: 10%;
+    border-radius: 10%;
+    border-width:0.1em;
+    border-color:#ddd;
+    color: #dddddd !important;
+}
+
+.rb-ph-show-extra-btn:hover {
+    background: rgb(40, 83, 140);
+    color:#fff !important;
+    border-color:#fff;
+}
+
+#rb-ph-extra {
+    padding: 25px;
+}
+
+#rb-ph-go-back {
+    float: right;
+    padding: 6px 10px 7px 10px;
+    background: rgb(0, 43, 100);
+    font-size: 14px;
+    -moz-border-radius: 10%;
+    -webkit-border-radius: 10%;
+    border-radius: 10%;
+    background-color: #009b96;
+    color: #ffffff !important;
+}
+
+#rb-ph-button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #009b96;
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 5px;
+    border-width:0;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+#rb-ph-payment-id {
+    color: #c0c0c0;
+    background: #111;
+    font-size: 21px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#rb-ph-log table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#rb-ph-log thead th,
+#rb-ph-log tbody td {
+    display: table-cell;
+    padding: 15px 10px;
+    box-sizing: border-box;
+    min-width: 120px;
+}
+
+#rb-ph-log thead th:nth-child(1),
+#rb-ph-log tbody td:nth-child(1) { width: 150px; }
+
+#rb-ph-log thead th:nth-child(7),
+#rb-ph-log tbody td:nth-child(7) { width: 80px; }
+
+#rb-ph-log-table td {
+    vertical-align: top;
+}
+
+#rb-ph-log-table .rb-ph-result-icon {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 28px;
+}
+
+#rb-ph-log-table .success-entry .rb-ph-result-icon::before {
+    content: '\2713';
+    color: #e1be00;
+}
+
+#rb-ph-log-table .error-entry .rb-ph-result-icon::before {
+    content: '\2717';
+    color: #c85f00;
+}
+
+#rb-ph-log-table .rb-ph-result-icon::before {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+#rb-ph .close-window-link {
+    float:right;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #dddddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-align:center;
+    overflow:hidden;
+}
+
+#rb-ph .close-window-link .close-symbol {
+    color: rgb(46, 46, 46);
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: -2px;
+}

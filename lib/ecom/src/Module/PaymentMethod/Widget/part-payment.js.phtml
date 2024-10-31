@@ -1,0 +1,532 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+/** @var PartPayment $this */
+
+use Resursbank\Ecom\Lib\Locale\Translator;
+use Resursbank\Ecom\Module\PaymentMethod\Widget\PartPayment;
+
+?>
+/**
+ * Update the starting cost element with the configured cost of the product /
+ * cart where the widget is rendered.
+ */
+class Resursbank_PartPayment {
+    'use strict';
+
+    /**
+     * Safely override pre-defined functions and properties using the supplied
+     * overrides parameter. Example:
+     *
+     * { "getUrl": function () { // Custom code to get URL } }
+     *
+     * This allows for complex implementations where things like inputs, error
+     * handlers, loaders etc. are unknown variables.
+     *
+     * @param {HTMLElement} el
+     * @param {{}} overrides
+     */
+    constructor(
+        el,
+        overrides = {}
+    ) {
+        // If element does not exist, warn in console and exit.
+        if (!el) {
+            console.warn('Failed to find part payment widget container element.');
+            return;
+        }
+
+        this.el = el;
+
+        for (const [key, value] of Object.entries(overrides)) {
+            if (typeof this[key] === typeof value) {
+                this[key] = value;
+            } else {
+                console.warn('Failed to overwrite ' + key + ', type mismatch.');
+            }
+        }
+    }
+
+    /**
+     * HTML element containing widget instance.
+     *
+     * @type {HTMLElement}
+     */
+    el = null;
+
+    /**
+     * Whether an AJAX request is active.
+     *
+     * @type {boolean}
+     */
+    fetching = false;
+
+    /**
+     * Queue of amounts to fetch.
+     *
+     * This queue contains a single value. We specify this as an array for
+     * consistency where we use it.
+     *
+     * @type {number[]}
+     */
+    queue = [];
+
+    /**
+     * Event listener to update starting cost.
+     *
+     * We store this in a property to be able to remove it when we reload
+     * element observers. Otherwise, we would end up with multiple listeners
+     * for the same event.
+     *
+     * @type {*}
+     */
+    updater = this.updateStartingCost.bind(this);
+
+    /**
+     * Last amount rendered in payment widget info.
+     *
+     * @type {number}
+     */
+    lastAmount = <?= $this->amount ?>;
+
+    /**
+     * Whether current monthly cost is eligible for part payments.
+     *
+     * @type {boolean}
+     */
+    eligibleCost = true;
+
+    /**
+     * Create new instance of self and setup element listeners.
+     *
+     * Element listeners are set up to trigger the updateStartingCost method,
+     * these are defined in the getObservableElements method.
+     *
+     * We use different event listeners depending on the type of element we are:
+     *
+     * - Form: We listen for the change event.
+     * - Others: We listen for the DOMSubtreeModified event.
+     *
+     * @returns {Resursbank_PartPayment}
+     */
+    static createInstance(el, overrides = {}) {
+        const instance = new Resursbank_PartPayment(el, overrides);
+
+        instance.reloadElementObservers();
+
+        <?php if (!$this->isEligible()): ?>
+        instance.eligibleCost = false;
+        document.querySelector('.rb-rm-link').style.visibility = 'hidden';
+        <?php endif; ?>
+
+        return instance;
+    }
+
+    /**
+     * Reload element observers.
+     *
+     * This is useful when implementation is made in a reactive context. For
+     * example when fields are added dynamically to the form.
+     */
+    reloadElementObservers() {
+        try {
+            this.getObservableElements().forEach(element => {
+                // Remove existing listeners
+                element.removeEventListener('change', this.updater);
+                element.removeEventListener('DOMSubtreeModified', this.updater);
+
+                // Add new listeners
+                if (element.tagName === 'FORM' ||
+                    element.tagName === 'INPUT' ||
+                    element.tagName === 'SELECT' ||
+                    element.tagName === 'TEXTAREA'
+                ) {
+                    element.addEventListener('change', this.updater);
+                } else {
+                    element.addEventListener('DOMSubtreeModified', this.updater);
+                }
+            });
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * Perform AJAX request to fetch starting cost HTML and update the element.
+     *
+     * This method will queue requested amounts, to avoid unnecessary requests.
+     * How this works is best illustrated by an example scenario:
+     *
+     * 1. User configures amount (changes product options etc. to affect price).
+     * 2. We replace this.queue with an array, containing the new amount.
+     * 3. We run a while loop to fetch the next amount specified in the queue,
+     * clearing the queue as we go. Each iteration performs an AJAX request,
+     * which we wait for to finish.
+     * 4. User rapidly re-configures the amount, changing it several times
+     * before the first fetch is complete. We only care about the latest amount,
+     * so we replace the queue with the new amount.
+     * 5. We avoid executing the while loop concurrently by using the flag
+     * this.fetching
+     *
+     * The same could be achieved by simply storing the latest amount as a
+     * number without the array. The array just makes the code a little cleaner.
+     */
+    async updateStartingCost() {
+        try {
+            let amount = this.getAmount();
+
+            // Avoid fetching requests for the same as the current amount, and
+            // avoid fetching for amounts less than or equal to zero.
+            //
+            // Note that we check if the new amount differs from the last amount
+            // by a small margin, to avoid fetching the same amount multiple
+            // times due to floating point precision issues.
+            if (amount <= 0 || Math.abs(this.lastAmount - amount) <= 0.0001) {
+                return;
+            }
+
+            // Please see the method documentation for an explanation of how the
+            // queue works.
+            this.queue = [amount];
+
+            // Avoid fetching if we are already fetching.
+            if (this.fetching) {
+                return;
+            }
+
+            // Toggle fetching loader.
+            this.toggleLoader();
+
+            // Reset error element.
+            this.el.querySelector('.rb-pp-error').style.display = 'none';
+
+            while (this.queue.length > 0) {
+                let amount = this.queue.shift();
+                this.lastAmount = amount;
+                this.fetching = true;
+
+                await fetch('<?= $this->fetchStartingCostUrl ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': this.getRequestContentType()
+                    },
+                    body: this.getRequestBody(amount)
+                })
+                    .then(this.handleFetchResponse.bind(this))
+                    .then(this.handleFetchData.bind(this))
+                    .then(this.toggleLoader.bind(this))
+                    .then(this.onComplete.bind(this))
+                    .catch(this.errorHandler.bind(this));
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+
+        this.fetching = false;
+    }
+
+    /**
+     * Resolve body for AJAX request.
+     *
+     * @returns {string}
+     */
+    getRequestBody(amount) {
+        return JSON.stringify(this.getRequestData(amount));
+    }
+
+    /**
+     * Resolve content type for AJAX request.
+     *
+     * @returns {string}
+     */
+    getRequestContentType() {
+        return 'application/json';
+    }
+
+    /**
+     * Resolve body for AJAX request.
+     *
+     * @returns {{}}
+     */
+    getRequestData(amount) {
+        let data = {
+            amount: amount
+        };
+
+        // Merge custom request data. Override existing keys.
+        return Object.assign(data, this.getCustomRequestData());
+    }
+
+    /**
+     * Resolve HTML element on page containing price information for this widget
+     * instance. This is the element we may parse to get the amount we use in
+     * our fetch call.
+     *
+     * Note that you are intended to define this with an override in your
+     * implementation, if you do not resolve amount in a different way by
+     * overriding getAmount() instead.
+     *
+     * @returns {HTMLElement}
+     */
+    getAmountElement() {
+        throw new Error(
+            '<?= Translator::translate(phraseId: 'part-payment-widget-missing-amount-element') ?>'
+        );
+    }
+
+    /**
+     * Resolve observable element to update starting cost on change.
+     *
+     * Preferably this is the form containing options which may affect the price
+     * of the entity associated with this widget instance. For example, for a
+     * product page this may be the form containing qty and product options.
+     *
+     * When the element (form) changes, we will update the starting cost.
+     *
+     * Note that you are intended to define this with an override in your
+     * implementation, unless you define a custom behavior to execute
+     * updateStartingCost() instead.
+     *
+     * @returns {[HTMLElement]}
+     */
+    getObservableElements() {
+        throw new Error(
+            '<?= Translator::translate(phraseId: 'part-payment-widget-missing-observable-elements') ?>'
+        );
+    }
+
+    /**
+     * Resolve HTML input element containing qty value.
+     *
+     * Note that you are intended to define this with an override in your
+     * implementation, if you do not resolve qty in a different way by
+     * overriding getQty() instead.
+     *
+     * @returns {HTMLInputElement}
+     */
+    getQtyElement() {
+        throw new Error(
+            '<?= Translator::translate(phraseId: 'part-payment-widget-missing-qty-element') ?>'
+        );
+    }
+
+    /**
+     * Resolve currently configured amount.
+     *
+     * Please note that this is a standard implementation, intended to function
+     * on various platforms and custom implementations of this widget. Since we
+     * cannot know of any other data source than the elements containing the
+     * price data, we will resolve the amount from the element and parse it as
+     * best we can.
+     *
+     * @returns {number}
+     */
+    getAmount() {
+        const el = this.getAmountElement();
+
+        // Confirm el is a valid element.
+        if (!el || !el.innerHTML) {
+            return 0;
+        }
+
+        return Resursbank_PartPayment.parseFromContentToFloat(el.innerHTML)  * this.getQty();
+    }
+
+    /**
+     * Resolve currently configured qty.
+     *
+     * @returns {number}
+     */
+    getQty() {
+        try {
+            const el = this.getQtyElement();
+
+            // Confirm el is a valid element.
+            if (!el || !el.value) {
+                return 1;
+            }
+
+            // Parse the resulting string as a float.
+            return Resursbank_PartPayment.parseFromContentToFloat(el.value);
+        } catch (e) {
+            // Not being able to resolve qty is not a critical error.
+            return 1;
+        }
+    }
+
+    /**
+     * Resolve JSON data from request response.
+     *
+     * @param {Response} response
+     * @returns {Promise<any>|undefined}
+     */
+    handleFetchResponse(response) {
+        if (!response.ok) {
+            throw new Error(
+                '<?= Translator::translate(phraseId: 'part-payment-widget-server-error') ?>'
+            );
+        } else {
+            return response.json();
+        }
+    }
+
+    /**
+     * Update example element with new content.
+     *
+     * @param {any} data
+     */
+    handleFetchData(data) {
+        if (typeof data === 'undefined') {
+            return;
+        }
+
+        if (data.error) {
+            throw new Error(data.error);
+        } else if (
+            data.hasOwnProperty('startingAt') &&
+            data.hasOwnProperty('startingAtHtml') &&
+            data.hasOwnProperty('readMoreWidget') &&
+            data.startingAt !== undefined &&
+            data.startingAtHtml !== undefined &&
+            data.readMoreWidget !== undefined &&
+            data.readMoreWidget !== ""
+        ) {
+            this.el.querySelector('.rb-pp-starting-at').innerHTML = data.startingAtHtml;
+
+            <?php if ($this->threshold > 0): ?>
+            if (parseFloat(data.startingAt) < <?= $this->threshold ?>) {
+                this.eligibleCost = false;
+                return;
+            }
+            <?php endif; ?>
+
+            // We must create a new element in order to replace the existing one.
+            let newReadMore = document.createElement('div');
+            newReadMore.className = 'rb-rm-container';
+            newReadMore.innerHTML = data.readMoreWidget;
+
+            // The container element will exist after the first replacement.
+            if (this.el.querySelector('.rb-rm-container')) {
+                this.el.querySelector('.rb-rm-container').replaceWith(newReadMore);
+            } else {
+                this.el.querySelector('.rb-rm').replaceWith(newReadMore);
+            }
+        } else {
+            throw new Error('<?= Translator::translate(phraseId: 'part-payment-widget-missing-starting-at-data') ?>');
+        }
+    }
+
+    /**
+     * Basic error handler.
+     *
+     * @param {Error} message
+     */
+    errorHandler(message) {
+        // Clear queue to avoid subsequent requests.
+        this.queue = [];
+
+        // Resolve error container.
+        const errorEl = this.el.querySelector('.rb-pp-error');
+
+        // Insert error message into error element.
+        errorEl.innerHTML = message.message;
+
+        // Display error message.
+        errorEl.style.display = 'block';
+
+        // Hide loader.
+        this.toggleLoader();
+    }
+
+    /**
+     * Show / hide loading animation on top of widget content.
+     */
+    toggleLoader() {
+        const state = this.queue.length > 0;
+
+        this.onToggleLoader(state);
+
+        const loader = document.querySelector('.rb-pp-loader');
+        const overlay = document.querySelector('.rb-pp-overlay');
+        const readMore = document.querySelector('.rb-rm-link');
+
+        if (state) {
+            loader.style.display = 'block';
+            overlay.style.display = 'block';
+
+            // Using visibility to avoid affecting height of the container.
+            readMore.style.visibility = 'hidden';
+        } else {
+            loader.style.display = 'none';
+            overlay.style.display = 'none';
+
+            // Using visibility to avoid affecting height of the container.
+            if (this.eligibleCost) {
+                readMore.style.visibility = 'visible';
+            }
+        }
+    }
+
+    /**
+     * Events performed when AJAX request has completed.
+     */
+    onComplete() {
+        // Placeholder.
+    }
+
+    /**
+     * Events performed when toggling.
+     *
+     * @param {boolean} state
+     */
+    onToggleLoader(state) {
+        // Placeholder.
+    }
+
+    /**
+     * Resolve custom request data.
+     *
+     * @returns {{}}
+     */
+    getCustomRequestData() {
+        return {};
+    }
+
+    /**
+     * Parse content to float.
+     *
+     * @param value
+     * @returns {number}
+     */
+    static parseFromContentToFloat(value) {
+        // Strip potential tags.
+        let content = value.replace(/<[^>]*>?/gm, '');
+
+        // Check if content contains any commas.
+        if (content.includes(',')) {
+            // Check if content contains any dots.
+            if (content.includes('.')) {
+                // Remove all commas.
+                content = content.replace(/,/g, '');
+            } else {
+                // Remove all commas except for the last one.
+                content = content.replace(/,(?=[^,]*,)/g, '');
+            }
+        }
+
+        // Replace all remaining commas with dots.
+        content = content.replace(/,/g, '.');
+
+        // Remove everything except digits and dots.
+        content = content.replace(/[^0-9.]/g, '');
+
+        // Parse the resulting string as a float.
+        return parseFloat(content);
+    }
+}

@@ -1,0 +1,14 @@
+.rb-cb {
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+.rb-cb-header {
+  font-weight: bold;
+}
+
+.rb-cb-url {
+  margin-bottom: 10px;
+  padding-bottom:10px;
+  border-bottom: 1px dashed #c0c0c0;
+}

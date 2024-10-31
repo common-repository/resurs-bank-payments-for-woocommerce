@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+/** @var UniqueSellingPoint $this */
+
+use Resursbank\Ecom\Module\PaymentMethod\Widget\UniqueSellingPoint;
+
+?>
+
+<div class="rb-usp">
+    <p>
+        <span class="rb-usp-header"><?= $this->message ?></span>
+    </p>
+    <!-- Read More link -->
+    <?= $this->readMore->content ?>
+</div>

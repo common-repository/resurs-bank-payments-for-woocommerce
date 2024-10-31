@@ -1,0 +1,210 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Resursbank\Ecom\Lib\Locale\Translator;
+use Resursbank\Ecom\Module\AnnuityFactor\Widget\GetPeriods;
+
+/** @var GetPeriods $this */
+?>
+
+/**
+ * Store and update periods for part payment configuration when selecting payment
+ * method.
+ */
+class Resursbank_GetPeriods {
+    'use strict';
+
+    /**
+     * List of available periods for each payment method.
+     *
+     * @type {boolean}
+     */
+    data = <?= $this->getJsonData() ?>;
+
+    /**
+     * Safely override pre-defined functions and properties using the supplied
+     * overrides parameter. Example:
+     *
+     * { "getPeriods": function () { // Custom code to get periods } }
+     *
+     * This allows for complex implementations where things like inputs, error
+     * handlers, loaders etc. are unknown variables.
+     *
+     * @param {{}} overrides
+     */
+    constructor(
+        overrides = {}
+    ) {
+        for (const [key, value] of Object.entries(overrides)) {
+            if (typeof this[key] === typeof value) {
+                this[key] = value;
+            } else {
+                console.warn('Failed to overwrite ' + key + ', type mismatch.');
+            }
+        }
+    }
+
+    /**
+     * Generate instance of Resursbank_GetPeriods with default behavior to
+     * interact with the DOM.
+     *
+     * This is useful when you want to use the default behavior of the class
+     * and only want to override specific functions.
+     *
+     * @param overrides
+     * @returns {Resursbank_GetPeriods}
+     */
+    static generate(overrides = {}) {
+        const instance = new Resursbank_GetPeriods(overrides);
+
+        try {
+            instance.getPaymentMethodElement().addEventListener(
+                'change',
+                function () {
+                    instance.updatePeriods();
+                }
+            );
+
+            instance.addPaymentMethods();
+            instance.updatePeriods();
+        } catch (e) {
+            instance.errorHandler(e);
+        }
+
+        return instance;
+    }
+
+    addPaymentMethods() {
+        const paymentMethods = <?= $this->getJsonPaymentMethods() ?>;
+        const paymentMethodElement = this.getPaymentMethodElement();
+        const selectedPaymentMethod = '<?= $this->selectedPaymentMethod ?>';
+
+        paymentMethodElement.length = 0;
+        for (const [key, value] of Object.entries(paymentMethods)) {
+            const option = document.createElement('option');
+            option.value = value.id;
+            option.text = value.name;
+            paymentMethodElement.add(option);
+
+            if (selectedPaymentMethod === option.value) {
+                paymentMethodElement.value = selectedPaymentMethod;
+            }
+        }
+    }
+
+    /**
+     * Update periods based on selected payment method.
+     */
+    updatePeriods() {
+        try {
+            // Reset period select element.
+            const periodSelect = this.getPeriodElement();
+
+            for (let i = 0; i < periodSelect.options.length; i++) {
+                periodSelect.options[i].remove();
+            }
+
+            periodSelect.length = 0;
+
+            // Get payment method id.
+            const paymentMethodId = this.getPaymentMethodElement().value;
+
+            // Scan list of periods for selected payment method.
+            if (paymentMethodId in this.data) {
+                const periods = this.data[paymentMethodId];
+                const selectedPeriod = '<?= $this->selectedPeriod ?>';
+
+                // Add periods to select element.
+                for (const [key, value] of Object.entries(periods)) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.text = value;
+                    periodSelect.add(option);
+
+                    if (selectedPeriod === option.value) {
+                        periodSelect.value = selectedPeriod;
+                    }
+                }
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * Resolve period select element.
+     *
+     * @returns {HTMLSelectElement}
+     */
+    getPeriodElement() {
+        let result = null;
+
+        <?php if ($this->periodElementId !== null): ?>
+        result = document.getElementById('<?= $this->periodElementId ?>');
+        <?php endif; ?>
+
+        if (result === null) {
+            throw new Error(
+                '<?= Translator::translate(phraseId: 'part-payment-get-periods-missing-period-element') ?>'
+            );
+        }
+
+        if (!result instanceof HTMLSelectElement) {
+            throw new Error(
+                '<?= Translator::translate(phraseId: 'part-payment-get-periods-invalid-period-element') ?>'
+            );
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolve payment method selection element.
+     *
+     * @returns {HTMLSelectElement}
+     */
+    getPaymentMethodElement() {
+        let result = null;
+
+        <?php if ($this->methodElementId !== null): ?>
+        result = document.getElementById('<?= $this->methodElementId ?>');
+        <?php endif; ?>
+
+        if (result === null) {
+            throw new Error(
+                '<?= Translator::translate(phraseId: 'part-payment-get-periods-missing-payment-method-element') ?>'
+            );
+        }
+
+        if (!result instanceof HTMLSelectElement) {
+            throw new Error(
+                '<?= Translator::translate(phraseId: 'part-payment-get-periods-invalid-payment-method-element') ?>'
+            );
+        }
+
+        return result;
+    }
+
+    /**
+     * Basic error handler.
+     *
+     * @param {Error} message
+     */
+    errorHandler(message) {
+        alert(message);
+    }
+}
+
+<?php if ($this->automatic): ?>
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+        Resursbank_GetPeriods.generate();
+    }
+);
+<?php endif; ?>

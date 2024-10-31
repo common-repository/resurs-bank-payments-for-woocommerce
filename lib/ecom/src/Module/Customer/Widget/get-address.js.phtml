@@ -1,0 +1,454 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Resursbank\Ecom\Lib\Locale\Translator;
+use Resursbank\Ecom\Lib\Order\CustomerType;
+
+/** @var Resursbank\Ecom\Module\Customer\Widget\GetAddress $this */
+?>
+
+class Resursbank_GetAddress {
+    'use strict';
+
+    /**
+     * Safely override pre-defined functions and properties using the supplied
+     * overrides parameter. Example:
+     *
+     * { "getUrl": function () { // Custom code to get AJAX request URL } }
+     *
+     * This allows for complex implementations where things like inputs, error
+     * handlers, loaders etc. are unknown variables.
+     *
+     * @param {{}} overrides
+     */
+    constructor(
+        overrides = {}
+    ) {
+        for (const [key, value] of Object.entries(overrides)) {
+            if (typeof this[key] === typeof value) {
+                this[key] = value;
+            } else {
+                console.warn('Failed to overwrite ' + key + ', type mismatch.');
+            }
+        }
+    }
+
+    /**
+     * Whether an AJAX request is active.
+     *
+     * @type {boolean}
+     */
+    fetching = false;
+
+    /**
+     * Setup event listeners for form submission and input changes. This will
+     * prevent form submission if an AJAX request is ongoing. This will also
+     * trigger a new AJAX request when input values change.
+     *
+     * @returns {void}
+     */
+    setupEventListeners() {
+        var that = this;
+
+        try {
+            this.getFetchBtnElement().addEventListener('click', function (e) {
+                e.preventDefault();
+                that.fetchAddress();
+            });
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * Perform AJAX request to fetch address data.
+     */
+    fetchAddress() {
+        try {
+            // Reset error state.
+            this.toggleErrorState('', false, false);
+
+            if (this.fetching || this.getGovIdElement().value === '') {
+                return;
+            }
+
+            const customerType = this.getCustomerType();
+
+            if (!this.validateGovId(this.getGovIdElement().value, customerType)) {
+                if (customerType === 'NATURAL') {
+                    this.toggleErrorState(
+                        '<?= Translator::translate(phraseId: 'get-address-invalid-ssn') ?>',
+                        true,
+                        true
+                    );
+                } else {
+                    this.toggleErrorState(
+                        '<?= Translator::translate(phraseId: 'get-address-invalid-org') ?>',
+                        true,
+                        true
+                    );
+                }
+
+                return;
+            }
+
+            this.toggleFetch(true);
+
+            const url = this.getUrl();
+
+            if (url === '') {
+                throw new Error('<?= Translator::translate(phraseId: 'get-address-missing-fetch-url') ?>');
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.getPostData())
+            })
+                .then(this.handleFetchResponse.bind(this))
+                .then(this.handleFetchData.bind(this))
+                .then(() => {
+                    this.toggleFetch(false)
+                })
+                .then(this.onComplete.bind(this))
+                .catch(this.errorHandler.bind(this));
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * Resolve URL for AJAX request.
+     *
+     * @returns {string}
+     */
+    getUrl() {
+        return '<?= $this->url ?>';
+    }
+
+    /**
+     * Update address input elements with data retrieved from API.
+     *
+     * This is a placeholder function, intended to be overridden by the
+     * implementing class.
+     *
+     * @param {any} data
+     * @returns {void}
+     */
+    updateAddress(data) {
+        throw new Error('<?= Translator::translate(phraseId: 'get-address-missing-update-address-implementation') ?>');
+    }
+
+    /**
+     * Get government ID input element.
+     *
+     * @returns {HTMLInputElement}
+     */
+    getGovIdElement() {
+        let result = document.getElementById('rb-ga-gov-id');
+
+        if (!(result instanceof HTMLInputElement)) {
+            throw new Error('<?= Translator::translate(phraseId: 'get-address-missing-gov-id-input') ?>');
+        }
+
+        return result;
+    }
+
+    /**
+     * Get input element to select NATURAL customer type.
+     *
+     * @returns {HTMLInputElement}
+     */
+    getCustomerTypeElNatural() {
+        let result = document.getElementById('rb-ga-ct-natural');
+
+        if (!(result instanceof HTMLInputElement)) {
+            throw new Error('<?= Translator::translate(
+                phraseId: 'get-address-missing-customer-type-input-natural')
+            ?>');
+        }
+
+        return result;
+    }
+
+    /**
+     * Get input element to select LEGAL customer type.
+     *
+     * @returns {HTMLInputElement}
+     */
+    getCustomerTypeElLegal() {
+        let result = document.getElementById('rb-ga-ct-legal');
+
+        if (!(result instanceof HTMLInputElement)) {
+            throw new Error('<?= Translator::translate(
+                phraseId: 'get-address-missing-customer-type-input-legal')
+            ?>');
+        }
+
+        return result;
+    }
+
+    /**
+     * Get customer type.
+     *
+     * @returns {"NATURAL"|"LEGAL"}
+     */
+    getCustomerType() {
+        let result = document.querySelector(
+            "input[name='rb-ga-ct']:checked"
+        );
+
+        if (!(result instanceof HTMLInputElement)) {
+            throw new Error('<?= Translator::translate(
+                phraseId: 'get-address-missing-selected-customer-type-input')
+            ?>');
+        }
+
+        return result.value;
+    }
+
+    /**
+     * Get fetch button element.
+     *
+     * @returns {HTMLButtonElement}
+     */
+    getFetchBtnElement() {
+        let result = document.getElementById('rb-ga-btn');
+
+        if (!(result instanceof HTMLButtonElement)) {
+            throw new Error('<?= Translator::translate(phraseId: 'get-address-missing-fetch-button') ?>');
+        }
+
+        return result;
+    }
+
+    /**
+     * Get widget container element.
+     *
+     * @returns {HTMLElement}
+     */
+    getWidgetElement() {
+        let result = document.getElementById('rb-ga-widget');
+
+        if (!(result instanceof HTMLElement)) {
+            throw new Error('<?= Translator::translate(phraseId: 'get-address-missing-widget-container-element') ?>');
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolve object with POST data for AJAX request.
+     *
+     * @returns {{}}
+     */
+    getPostData() {
+        return {
+            govId: this.getGovIdElement().value,
+            customerType: this.getCustomerType()
+        };
+    }
+
+    /**
+     * Validates an organisation number.
+     *
+     * @param {string} govId
+     * @returns {boolean}
+     */
+    validateOrg(govId) {
+        const sweden = /^(16\d{2}|18\d{2}|19\d{2}|20\d{2}|\d{2})(\d{2})(\d{2})(\-|\+)?([\d]{4})$/;
+
+        return sweden.test(govId);
+    }
+
+    /**
+     * Validates an SSN.
+     *
+     * @param {string} ssn
+     * @returns {boolean}
+     */
+    validateSsn(ssn) {
+        <?php // phpcs:ignore ?>
+        const sweden = /^(18\d{2}|19\d{2}|20\d{2}|\d{2})(0[1-9]|1[0-2])([0][1-9]|[1-2][0-9]|3[0-1])(\-|\+)?([\d]{4})$/;
+
+        return sweden.test(ssn);
+    }
+
+    /**
+     * @param {string} govId
+     * @param {"NATURAL"|"LEGAL"} customerType
+     * @returns {boolean}
+     */
+    validateGovId(govId, customerType) {
+        if (govId === '') {
+            return false;
+        }
+
+        return customerType === '<?= CustomerType::LEGAL->name ?>' ?
+            this.validateOrg(govId) :
+            this.validateSsn(govId);
+    }
+
+    /**
+     * Disable / enable AJAX request. We will also reflect the state to the
+     * elements we observe to execute the request, and show a spinner icon
+     * indicating an AJAX request is ongoing.
+     *
+     * @param {boolean} state
+     */
+    toggleFetch(state) {
+        this.onToggle(state);
+        this.fetching = Boolean(state);
+
+        const elements = [
+            this.getCustomerTypeElNatural(),
+            this.getCustomerTypeElLegal(),
+            this.getGovIdElement(),
+            this.getFetchBtnElement()
+        ];
+
+        // Toggle input elements.
+        elements.forEach((el) => {
+            if (this.fetching) {
+                el.setAttribute('disabled', '');
+            } else {
+                el.removeAttribute('disabled');
+            }
+        });
+
+        // Toggle spinner (loading) animation.
+        const spinner = document.querySelector('.rb-ga-fetch-icon');
+
+        if (spinner === null) {
+            return;
+        }
+
+        if (this.fetching) {
+            spinner.style.display = 'flex';
+        } else {
+            spinner.style.display = 'none';
+        }
+    }
+
+    /**
+     * Resolve JSON data from request response.
+     *
+     * @param {Response} response
+     * @returns {Promise<any>|undefined}
+     */
+    handleFetchResponse(response) {
+        if (!response.ok) {
+            throw new Error(
+                '<?= Translator::translate(phraseId: 'get-address-server-error') ?>'
+            );
+        } else {
+            return response.json();
+        }
+    };
+
+    /**
+     * Handle response from AJAX request (throw error or update inputs).
+     *
+     * @param {any} data
+     */
+    handleFetchData(data) {
+        if (typeof data === 'undefined') {
+            return;
+        }
+
+        if (data.error) {
+            throw new Error(data.error);
+        } else {
+            this.updateAddress(data);
+        }
+    }
+
+    /**
+     * Basic error handler.
+     *
+     * @param {Error} message
+     * @param {String} prettyMessage
+     */
+    errorHandler(message, prettyMessage = '') {
+        console.warn("Resurs Bank, Get Address Widget", message);
+
+        if (prettyMessage === '') {
+            prettyMessage = '<?= Translator::translate(phraseId: 'get-address-error') ?>';
+        }
+
+        this.toggleErrorState(prettyMessage, true);
+
+        if (this.fetching) {
+            this.toggleFetch(false);
+        }
+    }
+
+    /**
+     * Toggle error message container, and styling for input element.
+     *
+     * @param {String} message
+     * @param {Boolean} state
+     * @param {Boolean} markInput
+     */
+    toggleErrorState(message, state, markInput) {
+        const errorElement = document.getElementById('rb-ga-error');
+
+        if (!(errorElement instanceof HTMLElement)) {
+            if (state) {
+                alert(message);
+            }
+
+            return;
+        }
+
+        const govIdElement = this.getGovIdElement();
+
+        errorElement.innerText = message;
+
+        if (state) {
+            errorElement.style.display = 'block';
+            govIdElement.classList.add('error');
+        } else {
+            errorElement.style.display = 'none';
+            govIdElement.classList.remove('error');
+        }
+
+        if (markInput) {
+            govIdElement.classList.add('error');
+        } else {
+            govIdElement.classList.remove('error');
+        }
+    }
+
+    /**
+     * Events performed when AJAX request has completed.
+     */
+    onComplete() {
+        // Placeholder.
+    }
+
+    /**
+     * Events performed when toggling.
+     *
+     * @param {boolean} state
+     */
+    onToggle(state) {
+        // Placeholder.
+    }
+}
+
+<?php if ($this->automatic): ?>
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+        new Resursbank_GetAddress().setupEventListeners();
+    }
+);
+<?php endif; ?>

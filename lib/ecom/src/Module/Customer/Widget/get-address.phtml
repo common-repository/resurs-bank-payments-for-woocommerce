@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Resursbank\Ecom\Lib\Locale\Translator;
+use Resursbank\Ecom\Lib\Order\CustomerType;
+
+/** @var Resursbank\Ecom\Module\Customer\Widget\GetAddress $this */
+
+?>
+
+<div id="rb-ga-widget">
+    <div id="rb-ga-ct-area">
+        <label for="rb-ga-ct-natural">
+            <input
+                type="radio"
+                id="rb-ga-ct-natural"
+                name="rb-ga-ct"
+                value="<?= CustomerType::NATURAL->name ?>"
+                <?php if ($this->customerType === CustomerType::NATURAL): ?>
+                checked
+                <?php endif; ?>
+            />
+            <span>
+                <?= Translator::translate(phraseId: 'customer-type-natural') ?>
+            </span>
+        </label>
+        <label for="rb-ga-ct-legal">
+            <input
+                type="radio"
+                id="rb-ga-ct-legal"
+                name="rb-ga-ct"
+                value="<?= CustomerType::LEGAL->name ?>"
+                <?php if ($this->customerType === CustomerType::LEGAL): ?>
+                checked
+                <?php endif; ?>
+            />
+            <span>
+                <?= Translator::translate(phraseId: 'customer-type-legal') ?>
+            </span>
+        </label>
+    </div>
+    <div class="rb-ga-ssn-area">
+        <input type="text" id="rb-ga-gov-id" value="<?= $this->govId ?>" />
+        <button type="button" id="rb-ga-btn">
+            <span><?= Translator::translate(phraseId: 'fetch-address') ?></span>
+            <span class="rb-ga-fetch-icon">
+                <span class="rb-ga-fetch-icon-shard"></span>
+                <span class="rb-ga-fetch-icon-shard"></span>
+                <span class="rb-ga-fetch-icon-shard"></span>
+            </span>
+        </button>
+    </div>
+    <div id="rb-ga-error"></div>
+</div>

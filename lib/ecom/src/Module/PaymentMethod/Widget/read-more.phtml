@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+/** @var ReadMore $this */
+
+use Resursbank\Ecom\Module\PaymentMethod\Widget\ReadMore;
+
+?>
+
+<?php if ($this->url !== '') : ?>
+  <div class="rb-rm">
+    <div class="rb-logo"></div>
+    <div class="rb-rm-link">
+      <p onclick="document.getElementById('rb-rm-model-<?= $this->paymentMethod->id ?>').style.display='block';">
+          <?= $this->label ?>
+      </p>
+    </div>
+    <div id="rb-rm-model-<?= $this->paymentMethod->id ?>" style="display:none;">
+      <div class="rb-rm-background"
+           onclick="document.getElementById('rb-rm-model-<?= $this->paymentMethod->id ?>').style.display='none';">
+      </div>
+      <div class="rb-rm-iframe-container">
+        <div class="rb-rm-close"
+             onclick="document.getElementById('rb-rm-model-<?= $this->paymentMethod->id ?>').style.display='none';">
+            &#x2715;
+        </div>
+        <iframe class="rb-rm-iframe" src="<?= $this->url ?><?= $this->amount ?>" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>

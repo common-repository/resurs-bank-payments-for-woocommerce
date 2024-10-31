@@ -1,0 +1,139 @@
+[
+  {
+    "id": "resurs-invoice",
+    "translation": {
+      "en": "N/A",
+      "sv":  "Betala senare utan avgift",
+      "no": "Betal senere, uten gebyr",
+      "fi": "Maksa myöhemmin ilman kuluja",
+      "da": "Betal senere uden gebyr"
+    }
+  },
+  {
+    "id": "resurs-part-payment",
+    "translation": {
+      "en": "N/A",
+      "sv": "Betala i din takt",
+      "no": "Betal i ditt eget tempo",
+      "fi": "Maksa omaan tahtiisi",
+      "da": "Betal i dit eget tempo"
+    }
+  },
+  {
+    "id": "resurs-card",
+    "translation": {
+      "en": "N/A",
+      "sv": "Köp nu, betala senare",
+      "no": "Kjøp nå, betal senere.",
+      "fi": "Maksa omassa tahdissasi",
+      "da": "Køb nu, betal senere"
+    }
+  },
+  {
+    "id": "resurs-new-card",
+    "translation": {
+      "en": "N/A",
+      "sv": "Betala allt eller dela upp",
+      "no": "Betal alt på en gang, eller del opp beløpet",
+      "fi": "Maksa omassa tahdissasi",
+      "da": "Betal alt eller del op"
+    }
+  },
+  {
+    "id": "resurs-revolving-credit",
+    "translation": {
+      "en": "N/A",
+      "sv": "Köp nu, betala senare",
+      "no": "Betal i ditt eget tempo",
+      "fi": "Maksa omassa tahdissasi",
+      "da": "Køb nu, betal senere"
+    }
+  },
+  {
+    "id": "resurs-new-revolving-credit",
+    "translation": {
+      "en": "N/A",
+      "sv": "Betala allt eller dela upp",
+      "no": "Betal i ditt eget tempo",
+      "fi": "Maksa omassa tahdissasi",
+      "da": "Betal alt eller del op"
+    }
+  },
+  {
+    "id": "swish",
+    "translation": {
+      "en": "N/A",
+      "sv": "Godkänn betalningen i Swishappen på din telefon."
+    }
+  },
+  {
+    "id": "credit-card",
+    "translation": {
+      "en": "N/A",
+      "sv": "Betala ditt köp med ditt VISA eller Mastercard. Transaktionen sker via certifierad betalväxel och med SSL-kryptering vilket innebär att ingen obehörig kan se dina uppgifter. Inga kortuppgifter hanteras eller sparas av Resurs Bank. Vi accepterar inte kort som är utfärdade av en bank utanför norden.",
+      "no": "Betal for kjøpet med ditt VISA eller Mastercard. Når du har bekreftet kjøpet ved å klikke på Fullfør kjøp i kassen, må du oppgi kortopplysninger for å fullføre betalingen. Transaksjonen skjer via sertifisert betalingsaktør og med SSL-kryptering, noe som betyr at ingen uvedkommende kan se dine opplysninger. Resurs Bank behandler eller lagrer ingen kortinformasjon. Vi aksepterer ikke kort som er utstedt av en bank utenfor Norden.",
+      "fi": "Maksa ostoksesi VISA- tai MasterCard-kortilla. Kun olet vahvistanut ostoksesi klikkaamalla Vahvista ostos -painiketta, pääset syöttämään korttitietosi maksun suorittamista varten. Maksu tapahtuu sertifioidun maksuvaihteen kautta SSL-suojattuna. Tämä estää luvattomien henkilöiden pääsyn tietoihisi. Resurs Bank ei käsittele tai tallenna korttitietojasi. Hyväksymme maksuvälineeksi vain pohjoismaisten pankkien myöntämiä kortteja.",
+      "da": "Betal dit køb med dit VISA eller Mastercard. Transaktionen foregår via en certificeret betalingsudveksling og med SSL-kryptering, hvilket betyder, at ingen uvedkommende kan se dine oplysninger. Ingen kortoplysninger håndteres eller gemmes af Resurs Bank. Vi accepterer ikke kort, der er udstedt af en bank uden for Norden."
+    }
+  },
+  {
+    "id": "debit-card",
+    "translation": {
+      "en": "N/A",
+      "sv": "Betala ditt köp med ditt VISA eller Mastercard. Transaktionen sker via certifierad betalväxel och med SSL-kryptering vilket innebär att ingen obehörig kan se dina uppgifter. Inga kortuppgifter hanteras eller sparas av Resurs Bank. Vi accepterar inte kort som är utfärdade av en bank utanför norden.",
+      "no": "Betal for kjøpet med ditt VISA eller Mastercard. Når du har bekreftet kjøpet ved å klikke på Fullfør kjøp i kassen, må du oppgi kortopplysninger for å fullføre betalingen. Transaksjonen skjer via sertifisert betalingsaktør og med SSL-kryptering, noe som betyr at ingen uvedkommende kan se dine opplysninger. Resurs Bank behandler eller lagrer ingen kortinformasjon. Vi aksepterer ikke kort som er utstedt av en bank utenfor Norden.",
+      "fi": "Maksa ostoksesi VISA- tai MasterCard-kortilla. Kun olet vahvistanut ostoksesi klikkaamalla Vahvista ostos -painiketta, pääset syöttämään korttitietosi maksun suorittamista varten. Maksu tapahtuu sertifioidun maksuvaihteen kautta SSL-suojattuna. Tämä estää luvattomien henkilöiden pääsyn tietoihisi. Resurs Bank ei käsittele tai tallenna korttitietojasi. Hyväksymme maksuvälineeksi vain pohjoismaisten pankkien myöntämiä kortteja.",
+      "da": "Betal dit køb med dit VISA eller Mastercard. Transaktionen foregår via en certificeret betalingsudveksling og med SSL-kryptering, hvilket betyder, at ingen uvedkommende kan se dine oplysninger. Ingen kortoplysninger håndteres eller gemmes af Resurs Bank. Vi accepterer ikke kort, der er udstedt af en bank uden for Norden."
+    }
+  },
+  {
+    "id": "card",
+    "translation": {
+      "no": "Betal for kjøpet med ditt VISA eller Mastercard. Når du har bekreftet kjøpet ved å klikke på \"Fullfør kjøp\" i kassen, må du oppgi kortopplysninger for å fullføre betalingen. Transaksjonen skjer via sertifisert betalingsaktør og med SSL-kryptering, noe som betyr at ingen uvedkommende kan se dine opplysninger. Resurs Bank behandler eller lagrer ingen kortinformasjon. Vi aksepterer ikke kort som er utstedt av en bank utenfor Norden.",
+      "en": "Pay for your purchase with your VISA or Mastercard. Once you have confirmed the purchase by clicking on \"Complete Purchase\" at checkout, you must enter your card details to complete the payment. The transaction occurs via a certified payment operator and with SSL encryption, which means that no unauthorized persons can see your information. Resurs Bank does not process or store any card information. We do not accept cards issued by a bank outside the Nordic countries.",
+      "sv": "Betala för köpet med ditt VISA eller Mastercard. När du har bekräftat köpet genom att klicka på \"Slutför köp\" i kassan, måste du ange kortuppgifter för att slutföra betalningen. Transaktionen sker via en certifierad betalningsförmedlare och med SSL-kryptering, vilket innebär att inga obehöriga kan se dina uppgifter. Resurs Bank behandlar eller lagrar ingen kortinformation. Vi accepterar inte kort som är utgivna av en bank utanför Norden.",
+      "fi": "Maksa ostoksesi VISA- tai MasterCard-kortilla. Kun olet vahvistanut ostoksesi klikkaamalla Vahvista ostos -painiketta, pääset syöttämään korttitietosi maksun suorittamista varten. Maksu tapahtuu sertifioidun maksuvaihteen kautta SSL-suojattuna. Tämä estää luvattomien henkilöiden pääsyn tietoihisi. Resurs Bank ei käsittele tai tallenna korttitietojasi. Hyväksymme maksuvälineeksi vain pohjoismaisten pankkien myöntämiä kortteja.",
+      "da": "Betal for købet med dit VISA eller Mastercard. Når du har bekræftet købet ved at klikke på \"Afslut køb\" i kassen, skal du indtaste kortoplysninger for at fuldføre betalingen. Transaktionen sker via en certificeret betalingstjeneste og med SSL-kryptering, hvilket betyder, at ingen uvedkommende kan se dine oplysninger. Resurs Bank behandler eller opbevarer ingen kortoplysninger. Vi accepterer ikke kort, der er udstedt af en bank uden for Norden."
+    }
+  },
+  {
+    "id": "internet",
+    "translation": {
+      "no": "Betal direkte fra bankkontoen din på nett, støttet av sikkerhet på banknivå. Ingen kort, ingen app-nedlasting, ingen registrering.",
+      "en": "Pay directly from your bank account online, supported by bank-level security. No card, no app download, no registration.",
+      "sv": "Betala direkt från ditt bankkonto på nätet, stödd av säkerhet på banknivå. Inget kort, ingen app-nedladdning, ingen registrering.",
+      "da": "Betal direkte fra din bankkonto online, understøttet af sikkerhed på bankniveau. Intet kort, ingen app-download, ingen registrering.",
+      "fi": "Maksa suoraan omalta verkkopankkitililtäsi, varmennettu pankkitoiminnan tasoisella turvallisuudella. Ei kortteja, ei sovelluksia, ei rekisteröitymistä."
+    }
+  },
+  {
+    "id": "paypal",
+    "translation": {
+      "en": "N/A"
+    }
+  },
+  {
+    "id": "masterpass",
+    "translation": {
+      "en": "N/A"
+    }
+  },
+  {
+    "id": "other",
+    "translation": {
+      "en": "N/A"
+    }
+  },
+  {
+    "id": "resurs-zero",
+    "translation": {
+      "en": "N/A"
+    }
+  },
+  {
+    "id": "resurs-invoice-account",
+    "translation": {
+      "en": "N/A"
+    }
+  }
+]

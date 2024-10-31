@@ -1,0 +1,311 @@
+[
+  {
+    "id": "event-captured",
+    "translation": {
+      "en": "Payment fully captured.",
+      "sv": "Betalning helt debiterad."
+    }
+  },
+  {
+    "id": "event-partially-captured",
+    "translation": {
+      "en": "Payment partially captured.",
+      "sv": "Betalning delvis debiterad."
+    }
+  },
+  {
+    "id": "event-refunded",
+    "translation": {
+      "en": "Payment fully refunded.",
+      "sv": "Betalning helt återbetald."
+    }
+  },
+  {
+    "id": "event-partially-refunded",
+    "translation": {
+      "en": "Payment partially refunded.",
+      "sv": "Betalning delvis återbetald."
+    }
+  },
+  {
+    "id": "event-canceled",
+    "translation": {
+      "en": "Payment fully canceled.",
+      "sv": "Betalning helt annullerad."
+    }
+  },
+  {
+    "id": "event-partially-cancelled",
+    "translation": {
+      "en": "Payment partially cancelled.",
+      "sv": "Betalning delvis annullerad."
+    }
+  },
+  {
+    "id": "event-credit-denied",
+    "translation": {
+      "en": "Customer was denied credit application.",
+      "sv": "Kunden nekades kreditansökan."
+    }
+  },
+  {
+    "id": "event-aborted",
+    "translation": {
+      "en": "Customer aborted the purchase.",
+      "sv": "Kunden avbröt köpet."
+    }
+  },
+  {
+    "id": "event-capture-requested",
+    "translation": {
+      "en": "Sending request to capture payment.",
+      "sv": "Skickar anrop för att debitera betalning."
+    }
+  },
+  {
+    "id": "event-cancel-requested",
+    "translation": {
+      "en": "Sending request to cancel payment.",
+      "sv": "Skickar anrop för att annullera betalning."
+    }
+  },
+  {
+    "id": "event-refund-requested",
+    "translation": {
+      "en": "Sending request to refund payment.",
+      "sv": "Skickar anrop för att återbetala."
+    }
+  },
+  {
+    "id": "user-customer",
+    "translation": {
+      "en": "Customer",
+      "sv": "Kund"
+    }
+  },
+  {
+    "id": "user-cron",
+    "translation": {
+      "en": "Cron",
+      "sv": "Cron"
+    }
+  },
+  {
+    "id": "user-admin",
+    "translation": {
+      "en": "Admin",
+      "sv": "Admin"
+    }
+  },
+  {
+    "id": "user-resursbank",
+    "translation": {
+      "en": "Resurs Bank",
+      "sv": "Resurs Bank"
+    }
+  },
+  {
+    "id": "link-title",
+    "translation": {
+      "en": "Resurs Bank payment history",
+      "sv": "Resurs Bank betalhistorik"
+    }
+  },
+  {
+    "id": "go-back",
+    "translation": {
+      "en": "Go back",
+      "sv": "Gå tillbaka"
+    }
+  },
+  {
+    "id": "event",
+    "translation": {
+      "en": "Event",
+      "sv": "Händelse"
+    }
+  },
+  {
+    "id": "previous-status",
+    "translation": {
+      "en": "Previous order status",
+      "sv": "Dåvarande orderstatus"
+    }
+  },
+  {
+    "id": "current-status",
+    "translation": {
+      "en": "New order status",
+      "sv": "Ny orderstatus"
+    }
+  },
+  {
+    "id": "extra",
+    "translation": {
+      "en": "Extra",
+      "sv": "Extra"
+    }
+  },
+  {
+    "id": "user",
+    "translation": {
+      "en": "User",
+      "sv": "Användare"
+    }
+  },
+  {
+    "id": "show-extra",
+    "translation": {
+      "en": "Show",
+      "sv": "Visa"
+    }
+  },
+  {
+    "id": "widget-title",
+    "translation": {
+      "en": "Payment #%s [%s]",
+      "sv": "Betalning #%s [%s]"
+    }
+  },
+  {
+    "id": "event-request-failed",
+    "translation": {
+      "en": "The request failed.",
+      "sv": "Anropet misslyckades."
+    }
+  },
+  {
+    "id": "result",
+    "translation": {
+      "en": "Result",
+      "sv": "Resultat"
+    }
+  },
+  {
+    "id": "test",
+    "translation": {
+      "en": "Test",
+      "sv": "Test"
+    }
+  },
+  {
+    "id": "production",
+    "translation": {
+      "en": "Production",
+      "sv": "Produktion"
+    }
+  },
+  {
+    "id": "time",
+    "translation": {
+      "en": "Time",
+      "sv": "Tid"
+    }
+  },
+  {
+    "id": "event-callback-authorization",
+    "translation": {
+      "en": "Authorization callback accepted.",
+      "sv": "Authorization callback accepterad."
+    }
+  },
+  {
+    "id": "event-callback-management",
+    "translation": {
+      "en": "Management callback accepted.",
+      "sv": "Management callback accepterad."
+    }
+  },
+  {
+    "id": "event-callback-completed",
+    "translation": {
+      "en": "Callback processed.",
+      "sv": "Callback hanterad."
+    }
+  },
+  {
+    "id": "event-callback-failed",
+    "translation": {
+      "en": "Callback failed.",
+      "sv": "Callback misslyckades."
+    }
+  },
+  {
+    "id": "event-reached-order-success-page",
+    "translation": {
+      "en": "Reached order success page.",
+      "sv": "Nådde sidan med orderbekräftelse."
+    }
+  },
+  {
+    "id": "event-reached-order-failure-page",
+    "translation": {
+      "en": "Reached order failure page.",
+      "sv": "Nådde sidan för misslyckad beställning."
+    }
+  },
+  {
+    "id": "event-order-canceled",
+    "translation": {
+      "en": "Order canceled.",
+      "sv": "Beställning makulerad."
+    }
+  },
+  {
+    "id": "event-order-canceled-cron",
+    "translation": {
+      "en": "Order canceled by cron job.",
+      "sv": "Beställning makulerad av cronjobb."
+    }
+  },
+  {
+    "id": "event-invoice-created",
+    "translation": {
+      "en": "Invoice created.",
+      "sv": "Faktura skapad."
+    }
+  },
+  {
+    "id": "event-redirected-to-gateway",
+    "translation": {
+      "en": "Customer redirected to gateway.",
+      "sv": "Kunden skickades till gateway."
+    }
+  },
+  {
+    "id": "event-legacy",
+    "translation": {
+      "en": "Legacy event.",
+      "sv": "Legacyhändelse."
+    }
+  },
+  {
+    "id": "status",
+    "translation": {
+      "en": "Status",
+      "sv": "Status"
+    }
+  },
+  {
+    "id": "state",
+    "translation": {
+      "en": "State",
+      "sv": "State"
+    }
+  },
+  {
+    "id": "unchanged",
+    "translation": {
+      "en": "Unchanged",
+      "sv": "Oförändrad"
+    }
+  },
+  {
+    "id": "authorization-callback-received",
+    "translation": {
+      "en": "Authorization callback received with status %s.",
+      "sv": "Authorization callback inkom med status %s.",
+      "no": "Autorisasjons tilbakeringing mottatt med status %s."
+    }
+  }
+]

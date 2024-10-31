@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+/** @var PaymentInformation $this */
+/** @psalm-scope-this PaymentInformation */
+
+use Resursbank\Ecom\Lib\Locale\Translator;
+use Resursbank\Ecom\Module\Payment\Widget\PaymentInformation;
+
+?>
+
+<div class="rb-pi">
+    <table>
+        <tr>
+            <th><?= Translator::translate(phraseId: 'payment') ?></th>
+            <th><?= $this->logo ?></th>
+        </tr>
+        <?= $this->getTrElement(title: $this::PAYMENT_ID_LABEL, content: $this->paymentId) ?>
+        <?= $this->getTrElement(
+            title: 'authorized-amount',
+            content: $this->getFormattedAmount($this->getAuthorizedAmount())
+        ) ?>
+        <?= $this->getTrElement(
+            title: 'captured-amount',
+            content: $this->getFormattedAmount($this->getCapturedAmount())
+        ) ?>
+        <?= $this->getTrElement(
+            title: 'refunded-amount',
+            content: $this->getFormattedAmount($this->getRefundedAmount())
+        ) ?>
+        <?= $this->getTrElement(
+            title: 'cancelled-amount',
+            content: $this->getFormattedAmount($this->getCancelledAmount())
+        ) ?>
+        <?= $this->getTrElement(title: 'status', content: $this->getStatus()) ?>
+        <?= $this->getTrElement(title: 'payment-method', content: $this->getPaymentMethodName()) ?>
+        <tr>
+            <th><?= Translator::translate(phraseId: 'customer') ?></th>
+            <?php // Magento will strip colspan attribute, do not remove the empty th tag. ?>
+            <th></th>
+        </tr>
+        <?= $this->getTrElement(title: 'name', content: $this->getCustomerName()) ?>
+        <?php if ($this->hasAddress()): ?>
+            <?= $this->getTrElement(title: 'address', content: $this->getAddressContent()) ?>
+        <?php endif; ?>
+        <?= $this->getTrElement(title: 'telephone', content: $this->getTelephone()) ?>
+        <?= $this->getTrElement(title: 'email', content: $this->getEmail()) ?>
+    </table>
+</div>

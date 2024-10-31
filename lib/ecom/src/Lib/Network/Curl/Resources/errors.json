@@ -1,0 +1,44 @@
+[
+  {
+    "id": "customer-mobilephone-is-not-valid",
+    "translation": {
+      "en": "Mobile phone is not valid",
+      "sv": "Mobiltelefon är ej korrekt"
+    }
+  },
+  {
+    "id": "customer-governmentid-is-not-valid",
+    "translation": {
+      "en": "Government ID is not valid",
+      "sv": "Personnummer är ej korrekt"
+    }
+  },
+  {
+    "id": "customer-email-is-not-valid",
+    "translation": {
+      "en": "Email is not valid",
+      "sv": "Epostadress är ej korrekt"
+    }
+  },
+  {
+    "id": "customer-deliveryaddress-postalcode-must-match-------d--1-10---",
+    "translation": {
+      "en": "Postal code is not valid",
+      "sv": "Postnummer är ej korrekt"
+    }
+  },
+  {
+    "id": "customer-deliveryaddress-postalcode",
+    "translation": {
+      "en": "Postal code is not valid",
+      "sv": "Postnummer är ej korrekt"
+    }
+  },
+  {
+    "id": "customer-deliveryaddress-postalcode-must-match-test",
+    "translation": {
+      "en": "Postal code is not valid",
+      "sv": "Postnummer är ej korrekt"
+    }
+  }
+]

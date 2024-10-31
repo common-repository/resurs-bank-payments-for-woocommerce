@@ -1,0 +1,58 @@
+[
+  {
+    "id": "unknown",
+    "translation": {
+      "en": "Application was denied for an unknown reason.",
+      "sv": "Ansökan avslogs av okänd orsak."
+    }
+  },
+  {
+    "id": "technical-error",
+    "translation": {
+      "en": "Application was denied due to a technical error.",
+      "sv": "Ansökan avslogs på grund av ett tekniskt fel."
+    }
+  },
+  {
+    "id": "credit-denied",
+    "translation": {
+      "en": "Unfortunately, your application could not be approved.",
+      "sv": "Tyvärr så kunde inte din ansökan godkännas."
+    }
+  },
+  {
+    "id": "payment-frozen",
+    "translation": {
+      "en": "The payment has been frozen.",
+      "sv": "Betalningen har frysts."
+    }
+  },
+  {
+    "id": "timeout",
+    "translation": {
+      "en": "Application was denied due to a timeout error.",
+      "sv": "Ansökan avslogs på grund av att en tidsgräns nåddes."
+    }
+  },
+  {
+    "id": "aborted-by-customer",
+    "translation": {
+      "en": "Application was aborted by the customer.",
+      "sv": "Ansökan avbröts av kunden."
+    }
+  },
+  {
+    "id": "insufficient-funds",
+    "translation": {
+      "en": "Application was denied due to insufficient funds.",
+      "sv": "Ansökan avslogs på grund av otillräckliga tillgångar"
+    }
+  },
+  {
+    "id": "canceled",
+    "translation": {
+      "en": "Application was canceled.",
+      "sv": "Ansöka avbröts."
+    }
+  }
+]
